@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
     cin >> filePath;
     file.open(filePath.c_str());
     if (!file && filePath != "exit") {
-      cout << "\n\nCaminho Inálido!\n\n";
+      cout << "\n\nCaminho Inválido!\n\n";
     }
   } while(!file && filePath != "exit");
 
