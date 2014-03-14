@@ -5,6 +5,31 @@
 
   void init(void) {
     glClearColor (0.0, 0.0, 0.0, 0.0);
+   // glEnable(GL_LIGHTING);
+   // glEnable(GL_LIGHT0);
+    glClearDepth(1.0);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_TEXTURE_2D);
+    // glEnable(GL_COLOR_MATERIAL);
+
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glCullFace(GL_BACK);
+
+    glutSetCursor(GLUT_CURSOR_NONE);
+
+
+    GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+    GLfloat light_specular[] = {1.0, 1.0, 1.0,1.0};
+    GLfloat light_diffuse[] = {1.0, 1.0, 1.0,1.0};
+
+    glShadeModel (GL_SMOOTH);
+
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
   }
 
   void display(void) {
@@ -12,8 +37,7 @@
     glColor3f (1.0, 1.0, 1.0);
     glLoadIdentity ();         /* clear the matrix */
     /* viewing transformation  */
-    gluLookAt (1.0, 3.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-    glScalef (1.0, 2.0, 1.0);    /* modeling transformation */
+    gluLookAt (-10.0, 10.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
     m.render();
 

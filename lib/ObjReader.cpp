@@ -175,7 +175,9 @@ Face ObjReader::getFace(string line) {
 
     // create normals
     if (infos[2] > -1) {
-      f.vertices.push_back(infos[2]);
+      f.normals.push_back(infos[2]);
+    } else if (infos[0] > -1) {
+      f.normals.push_back(-1);
     }
   }
 
