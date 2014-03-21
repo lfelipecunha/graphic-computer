@@ -13,7 +13,7 @@
     glEnable(GL_LIGHTING);
     glEnable(GL_CULL_FACE);
     glEnable(GL_TEXTURE_2D);
-    // glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_COLOR_MATERIAL);
 
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     glCullFace(GL_BACK);
@@ -21,7 +21,7 @@
     glutSetCursor(GLUT_CURSOR_NONE);
 
 
-    GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+    GLfloat light_position[] = { m.maxVertex->points[0], m.maxVertex->points[1], m.maxVertex->points[2], 0.0 };
     GLfloat light_specular[] = {1.0, 1.0, 1.0,1.0};
     GLfloat light_diffuse[] = {1.0, 1.0, 1.0,1.0};
 
@@ -34,6 +34,7 @@
 
   void display(void) {
     glClear (GL_COLOR_BUFFER_BIT);
+    glColorMaterial(GL_FRONT, GL_DIFFUSE);
     glColor3f (1.0, 1.0, 1.0);
     glLoadIdentity ();         /* clear the matrix */
     /* viewing transformation  */
@@ -56,14 +57,18 @@
 int main(int argc, char** argv) {
   string filePath;
   ifstream file;
-  do {
+  cout << argv[1];
+  if (argc > 1) {
+    file.open(argv[1]);
+  }
+
+  while(!file && filePath != "exit") {
     cout << "Digite o caminho para o arquivo (ou exit para sair): ";
     cin >> filePath;
-    file.open(filePath.c_str());
     if (!file && filePath != "exit") {
       cout << "\n\nCaminho Inválido!\n\n";
     }
-  } while(!file && filePath != "exit");
+  }
 
   if (filePath != "exit") {
     m = ObjReader::getMesh(file);

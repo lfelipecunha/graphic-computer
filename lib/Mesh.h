@@ -9,9 +9,15 @@
 
   class Mesh {
     public:
+      Mesh();
       void render();
       vector<Group> groups;
-      vector<Vertex> allVertices;
       vector<Vertex> allNormals;
+      void addVertex(Vertex v);
+      Vertex* minVertex;
+      Vertex* maxVertex;
+
+    private:
+      vector<Vertex> allVertices;
   };
 #endif

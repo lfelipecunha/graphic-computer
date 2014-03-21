@@ -41,7 +41,7 @@ Mesh ObjReader::getMesh(ifstream &file) {
         // create a vertex
         } else {
           Vertex v = getVertex(buffer);
-          m.allVertices.push_back(v);
+          m.addVertex(v);
         }
         break;
       // Face
