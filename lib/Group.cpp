@@ -2,4 +2,5 @@
 
 Group::Group(string n) {
   name = n;
+  material = "";
 }

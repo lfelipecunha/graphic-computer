@@ -9,6 +9,7 @@
     public:
       Group(string name);
       string name;
+      string material;
       vector<Face> faces;
   };
 #endif

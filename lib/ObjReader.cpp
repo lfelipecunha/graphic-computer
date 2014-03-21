@@ -61,6 +61,16 @@ Mesh ObjReader::getMesh(ifstream &file) {
         actualGroup++;
         m.groups.push_back(getGroup(buffer));
         break;
+      case 'u':
+        if (buffer.compare(0,6,"usemtl") == 0) {
+          if(actualGroup < 0) {
+            // create a new group
+            actualGroup++;
+            m.groups.push_back(Group("default"));
+          }
+          m.groups[actualGroup].material = buffer.substr(7);
+        }
+        break;
     }
   }
 
