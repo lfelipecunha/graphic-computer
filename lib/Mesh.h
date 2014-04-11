@@ -4,15 +4,17 @@
   #include "includes.h"
   #include "Group.h"
   #include "Vertex.h"
+  #include "Material.h"
 
   using namespace std;
 
   class Mesh {
     public:
       Mesh();
-      void render();
+      void render(vector<Material> materials);
       vector<Group> groups;
       vector<Vertex> allNormals;
+      vector<Vertex> allTextures;
       void addVertex(Vertex v);
       Vertex* minVertex;
       Vertex* maxVertex;

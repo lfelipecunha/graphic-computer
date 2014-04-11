@@ -2,6 +2,7 @@
   #define __Group
   #include "includes.h"
   #include "Face.h"
+  #include "Material.h"
 
   using namespace std;
 
@@ -11,5 +12,6 @@
       string name;
       string material;
       vector<Face> faces;
+      vector<Material> materials;
   };
 #endif

@@ -39,6 +39,8 @@ Mesh ObjReader::getMesh(ifstream &file) {
           Vertex v = getVertex(buffer);
           m.allNormals.push_back(v);
         // create a vertex
+        } else if(buffer.at(1) == 't') {
+          m.allTextures.push_back(getVertex(buffer));
         } else {
           Vertex v = getVertex(buffer);
           m.addVertex(v);
@@ -86,7 +88,7 @@ Mesh ObjReader::getMesh(ifstream &file) {
  **/
 Vertex ObjReader::getVertex(string line) {
   // points of vertex
-  float points[3];
+  float points[3] = {0,0,0};
 
   // auxiliar variable
   int i =0;
@@ -182,6 +184,11 @@ Face ObjReader::getFace(string line) {
     }
 
     //@todo create Texture with infos[1]
+    if (infos[1] > -1) {
+      f.textures.push_back(infos[1]);
+    } else if (infos[0] > -1) {
+      f.textures.push_back(-1);
+    }
 
     // create normals
     if (infos[2] > -1) {

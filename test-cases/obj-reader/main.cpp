@@ -2,20 +2,27 @@
   #include "../../lib/Mesh.h"
 
   Mesh m;
+  vector<Material> materials;
 
   void init(void) {
     glClearColor (0.0, 0.0, 0.0, 0.0);
-   // glEnable(GL_LIGHTING);
-   // glEnable(GL_LIGHT0);
     glClearDepth(1.0);
     glEnable(GL_DEPTH_TEST);
+
     glEnable(GL_LIGHT0);
     glEnable(GL_LIGHTING);
+
     glEnable(GL_CULL_FACE);
-    glEnable(GL_TEXTURE_2D);
+
     glEnable(GL_COLOR_MATERIAL);
 
+    glEnable(GL_TEXTURE_2D);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
     glCullFace(GL_BACK);
 
     glutSetCursor(GLUT_CURSOR_NONE);
@@ -38,9 +45,9 @@
     glColor3f (1.0, 1.0, 1.0);
     glLoadIdentity ();         /* clear the matrix */
     /* viewing transformation  */
-    gluLookAt (-10.0, 10.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    gluLookAt (-5.0, 5.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-    m.render();
+    m.render(materials);
 
     glFlush ();
   }
@@ -55,16 +62,19 @@
 
 
 int main(int argc, char** argv) {
-  string filePath;
+  string filePath = "";
   ifstream file;
-  cout << argv[1];
   if (argc > 1) {
-    file.open(argv[1]);
+    filePath = argv[1];
   }
+
+  file.open(filePath.c_str());
+
 
   while(!file && filePath != "exit") {
     cout << "Digite o caminho para o arquivo (ou exit para sair): ";
     cin >> filePath;
+    file.open(filePath.c_str());
     if (!file && filePath != "exit") {
       cout << "\n\nCaminho Inválido!\n\n";
     }
@@ -72,6 +82,11 @@ int main(int argc, char** argv) {
 
   if (filePath != "exit") {
     m = ObjReader::getMesh(file);
+    string material_file = filePath.substr(0, filePath.length()-3) + "mtl";
+    ifstream m_file;
+    m_file.open(material_file.c_str());
+    materials = Material::getMaterials(m_file);
+
     glutInit(&argc, argv);
     glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB);
     glutInitWindowSize (500, 500);
