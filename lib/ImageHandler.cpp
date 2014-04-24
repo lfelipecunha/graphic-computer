@@ -76,16 +76,16 @@ ImageHandler::ImageHandler(const char *filePath) {
                 ( b * 255 / max );
         }
     } else {
-        for (j = width * height - 1; j >= 0; j--) {
+        for (j = 0; j < width * height ;  j++) {
             unsigned char r, g, b;
             r = is.get();
             g = is.get();
             b = is.get();
 
             pixels[j] =
-                ( ( r * 255 / max ) << 16 ) |
+                ( ( b * 255 / max ) << 16 ) |
                 ( ( g * 255 / max ) << 8 ) |
-                ( b * 255 / max );
+                ( r * 255 / max );
 
             if (pixels[j] != ImageHandler::ALPHA) {
                 pixels[j] = pixels[j] | (255 << 24);
