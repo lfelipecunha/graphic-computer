@@ -18,17 +18,19 @@ void Mesh::render(vector<Material> materials) {
         if (m.ns != NULL) {
           glMaterialfv(GL_FRONT, GL_SHININESS, m.ns);
         }
-        glTexImage2D(
-          GL_TEXTURE_2D,
-          0,
-          GL_RGBA,
-          m.texture->getWidth(),
-          m.texture->getHeight(),
-          0,
-          GL_RGBA,
-          GL_UNSIGNED_BYTE,
-          m.texture->getPixels()
-        );
+        if (m.texture != NULL) {
+          glTexImage2D(
+            GL_TEXTURE_2D,
+            0,
+            GL_RGBA,
+            m.texture->getWidth(),
+            m.texture->getHeight(),
+            0,
+            GL_RGBA,
+            GL_UNSIGNED_BYTE,
+            m.texture->getPixels()
+          );
+        }
         break;
       }
     }

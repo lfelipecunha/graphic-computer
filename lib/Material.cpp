@@ -4,6 +4,7 @@ Material::Material(string n) {
   name = n;
   ka = kd = ks = NULL;
   ns = NULL;
+  texture = NULL;
 }
 
 vector<Material> Material::getMaterials(ifstream &file) {
