@@ -12,6 +12,7 @@
     public:
       Mesh();
       void render(vector<Material> materials);
+      void render(vector<Material> materials, bool selection);
       vector<Group> groups;
       vector<Vertex> allNormals;
       vector<Vertex> allTextures;
@@ -21,5 +22,6 @@
 
     private:
       vector<Vertex> allVertices;
+      void proccessHits(GLint hits, GLuint buffer[]);
   };
 #endif

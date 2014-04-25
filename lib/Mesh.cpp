@@ -1,8 +1,29 @@
 #include "Mesh.h"
-
+int BUFSIZE = 255;
 void Mesh::render(vector<Material> materials) {
+  render(materials, false);
+}
+void Mesh::render(vector<Material> materials, bool selection) {
+  GLuint selectBuf[BUFSIZE];
+  GLint hits;
+  if (selection) {
+    glSelectBuffer(BUFSIZE, selectBuf);
+    (void) glRenderMode(GL_SELECT);
+    glInitNames();
+    glPushName(0);
+  }
+
   for (int i=0; i< (long)groups.size(); i++) {
+    glPushMatrix();
     Group g = groups[i];
+    if (!g.isActive()) {
+      glColor3f(1,0,0);
+    } else {
+      glColor3f(1,1,1);
+    }
+    if (selection) {
+      glLoadName(i);
+    }
     for (int h=0; h < (long)materials.size(); h++) {
       Material m = materials[h];
       if (g.material.compare(0,g.material.length(), m.name)) {
@@ -52,7 +73,31 @@ void Mesh::render(vector<Material> materials) {
       }
       glEnd();
     }
+    glPopMatrix();
   }
+  if (selection) {
+    hits = glRenderMode(GL_RENDER);
+    proccessHits(hits,selectBuf);
+  }
+}
+
+void Mesh::proccessHits(GLint hits, GLuint buffer[]) {
+  unsigned int j;
+  int i, g;
+  GLuint names, *ptr;
+
+  ptr = (GLuint *) buffer;
+  for (i = 0; i < hits; i++) { /*  for each hit  */
+    names = *ptr;
+    ptr++;
+    ptr++;
+    ptr++;
+    for (j = 0; j < names; j++) {     /*  for each name */
+      g = (int)*ptr;
+      ptr++;
+    }
+  }
+  groups[g].toogle();
 }
 
 void Mesh::addVertex(Vertex v) {

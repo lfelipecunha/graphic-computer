@@ -13,5 +13,9 @@
       string material;
       vector<Face> faces;
       vector<Material> materials;
+      bool isActive();
+      void toogle();
+    private:
+      bool status;
   };
 #endif
