@@ -9,6 +9,8 @@
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glClearDepth(1.0);
     glEnable(GL_DEPTH_TEST);
+    glDepthRange(0.0, 1.0);
+    glEnable(GL_CULL_FACE);
 
     glEnable(GL_LIGHT0);
     glEnable(GL_LIGHT1);
