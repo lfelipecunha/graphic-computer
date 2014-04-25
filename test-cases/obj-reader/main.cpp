@@ -70,11 +70,41 @@
       case 's':
         eye[2] += 1;
         break;
+      case 'a':
+        eye[0] += 1;
+        break;
+      case 'd':
+        eye[0] -= 1;
+        break;
+      case 'u':
+        glDisable(GL_LIGHTING);
+        break;
+      case 'l':
+        glEnable(GL_LIGHTING);
+        break;
       case 'q':
         exit(0);
     }
   }
 
+void pick(int button, int state, int x, int y) {
+  if (button != GLUT_LEFT_BUTTON || state != GLUT_DOWN)
+      return;
+  GLint viewport[4];
+  glGetIntegerv(GL_VIEWPORT, viewport);
+  glMatrixMode(GL_PROJECTION);
+  glPushMatrix();
+  glLoadIdentity();
+  gluPickMatrix ((GLdouble) x, (GLdouble) (viewport[3] - y),
+                     .1, .1, viewport);
+  gluPerspective (45.0, glutGet(GLUT_WINDOW_WIDTH)/(double)glutGet(GLUT_WINDOW_HEIGHT),.2, 1000);
+  glMatrixMode(GL_MODELVIEW);
+  m.render(materials,true);
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
+  glFlush();
+  glMatrixMode(GL_MODELVIEW);
+}
 
 
 int main(int argc, char** argv) {
@@ -105,12 +135,13 @@ int main(int argc, char** argv) {
       materials = Material::getMaterials(m_file);
     }
     glutInit(&argc, argv);
-    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+    glutInitDisplayMode (GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
     glutInitWindowSize (500, 500);
     glutInitWindowPosition (100, 100);
     glutCreateWindow (argv[0]);
     init ();
     glutIdleFunc(display);
+    glutMouseFunc(pick);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
     glutMainLoop();
