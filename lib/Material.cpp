@@ -43,7 +43,7 @@ vector<Material> Material::getMaterials(ifstream &file) {
   return materials;
 }
 
-Vertex* Material::getVertexFromLine(string line) {
+Point* Material::getVertexFromLine(string line) {
   // points of vertex
   float points[3];
 
@@ -68,5 +68,5 @@ Vertex* Material::getVertexFromLine(string line) {
   }
 
   // return readed Vertex
-  return new Vertex(points[0],points[1], points[2]);
+  return new Point(points[0],points[1], points[2]);
 }

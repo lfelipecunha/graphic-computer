@@ -36,13 +36,13 @@ Mesh ObjReader::getMesh(ifstream &file) {
       case 'v':
         // it's a normal vertex?
         if (buffer.at(1) == 'n') {
-          Vertex v = getVertex(buffer);
+          Point v = getVertex(buffer);
           m.allNormals.push_back(v);
         // create a vertex
         } else if(buffer.at(1) == 't') {
           m.allTextures.push_back(getVertex(buffer));
         } else {
-          Vertex v = getVertex(buffer);
+          Point v = getVertex(buffer);
           m.addVertex(v);
         }
         break;
@@ -84,9 +84,9 @@ Mesh ObjReader::getMesh(ifstream &file) {
  * Obtain vertex
  *
  * @param string line Line to be parsed
- * @return Vertex
+ * @return Point
  **/
-Vertex ObjReader::getVertex(string line) {
+Point ObjReader::getVertex(string line) {
   // points of vertex
   float points[3] = {0,0,0};
 
@@ -111,7 +111,7 @@ Vertex ObjReader::getVertex(string line) {
   }
 
   // return readed Vertex
-  return Vertex(points[0],points[1], points[2]);
+  return Point(points[0],points[1], points[2]);
 }
 
 /**

@@ -2,7 +2,7 @@
   #define __Material
 
   #include "includes.h"
-  #include "Vertex.h"
+  #include "Point.h"
   #include "ImageHandler.h"
 
   using namespace std;
@@ -11,11 +11,11 @@
     public:
       Material(string n);
       vector<Material> static getMaterials(ifstream &file);
-      Vertex *ka, *kd, *ks;
+      Point *ka, *kd, *ks;
       float *ns;
       string name;
       ImageHandler *texture;
     private:
-      static Vertex* getVertexFromLine(string line);
+      static Point* getVertexFromLine(string line);
   };
 #endif

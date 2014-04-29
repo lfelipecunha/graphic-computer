@@ -3,7 +3,7 @@
 
   #include "includes.h"
   #include "Mesh.h"
-  #include "Vertex.h"
+  #include "Point.h"
 
   using namespace std;
 
@@ -11,7 +11,7 @@
     public:
       static Mesh getMesh(ifstream &file);
     private:
-      static Vertex getVertex(string line);
+      static Point getVertex(string line);
       static Group getGroup(string line);
       static Face getFace(string line);
   };

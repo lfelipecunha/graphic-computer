@@ -28,13 +28,16 @@ void Mesh::render(vector<Material> materials, bool selection) {
       Material m = materials[h];
       if (g.material.compare(0,g.material.length(), m.name)) {
         if (m.ka != NULL) {
-          glMaterialfv(GL_FRONT, GL_AMBIENT, m.ka->points);
+          float aux[] = { m.ka->x, m.ka->y, m.ka->z };
+          glMaterialfv(GL_FRONT, GL_AMBIENT, aux);
         }
         if (m.kd != NULL) {
-          glMaterialfv(GL_FRONT, GL_DIFFUSE, m.kd->points);
+          float aux[] = { m.kd->x, m.kd->y, m.kd->z };
+          glMaterialfv(GL_FRONT, GL_DIFFUSE, aux);
         }
         if (m.ks != NULL) {
-          glMaterialfv(GL_FRONT, GL_SPECULAR, m.ks->points);
+          float aux[] = { m.ks->x, m.ks->y, m.ks->z };
+          glMaterialfv(GL_FRONT, GL_SPECULAR, aux);
         }
         if (m.ns != NULL) {
           glMaterialfv(GL_FRONT, GL_SHININESS, m.ns);
@@ -59,17 +62,18 @@ void Mesh::render(vector<Material> materials, bool selection) {
       Face face = g.faces[j];
       glBegin(GL_POLYGON);
       for (int k=0; k < (long)face.vertices.size(); k++) {
-        Vertex vertex = allVertices[face.vertices[k]];
+        Point* vertex = &allVertices[face.vertices[k]];
         if (face.normals[k] > -1) {
-          glNormal3fv(allNormals[face.normals[k]].points);
+          Point* p = &allNormals[face.normals[k]];
+          glNormal3f(p->x, p->y, p->z);
         }
 
 
         if (face.textures[k] > -1) {
-          Vertex v = allTextures[face.textures[k]];
-          glTexCoord2f(v.points[0], v.points[1]);
+          Point* v = &allTextures[face.textures[k]];
+          glTexCoord2f(v->x, v->y);
         }
-        glVertex3fv(vertex.points);
+        glVertex3f(vertex->x, vertex->y, vertex->z);
       }
       glEnd();
     }
@@ -100,37 +104,37 @@ void Mesh::proccessHits(GLint hits, GLuint buffer[]) {
   groups[g].toogle();
 }
 
-void Mesh::addVertex(Vertex v) {
+void Mesh::addVertex(Point v) {
   float x, y, z;
-  x = v.points[0];
-  y = v.points[1];
-  z = v.points[2];
+  x = v.x;
+  y = v.y;
+  z = v.z;
 
   allVertices.push_back(v);
 
-  if (minVertex->points[0] > x) {
-    minVertex->points[0] = x;
+  if (minVertex->x > x) {
+    minVertex->x = x;
   }
-  if (minVertex->points[1] > y) {
-    minVertex->points[1] = y;
+  if (minVertex->y > y) {
+    minVertex->y = y;
   }
-  if (minVertex->points[2] > z) {
-    minVertex->points[2] = z;
+  if (minVertex->y > z) {
+    minVertex->y = z;
   }
 
-  if (maxVertex->points[0] < x) {
-    maxVertex->points[0] = x;
+  if (maxVertex->x < x) {
+    maxVertex->x = x;
   }
-  if (maxVertex->points[1] < y) {
-    maxVertex->points[1] = y;
+  if (maxVertex->y < y) {
+    maxVertex->y = y;
   }
-  if (maxVertex->points[2] < z) {
-    maxVertex->points[2] = z;
+  if (maxVertex->z < z) {
+    maxVertex->z = z;
   }
 
 }
 
 Mesh::Mesh() {
-  minVertex = new Vertex(0,0,0);
-  maxVertex = new Vertex(0,0,0);
+  minVertex = new Point(0,0,0);
+  maxVertex = new Point(0,0,0);
 }

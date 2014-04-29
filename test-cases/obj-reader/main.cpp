@@ -1,9 +1,11 @@
   #include "../../lib/ObjReader.h"
   #include "../../lib/Mesh.h"
+  #include "../../lib/Camera.h"
 
   Mesh m;
   vector<Material> materials;
-  float eye[] = {-5, 5, 5};
+
+  Camera* camera;
 
   void init(void) {
     glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -29,10 +31,10 @@
 
 
 
-    GLfloat light_position[] = { m.maxVertex->points[0]+1, m.maxVertex->points[1], m.maxVertex->points[2], 0.0 };
+    GLfloat light_position[] = { m.maxVertex->x+1, m.maxVertex->y, m.maxVertex->z, 0.0 };
     GLfloat light_specular[] = {1.0, 1.0, 1.0,1.0};
     GLfloat light_diffuse[] = {1.0, 1.0, 1.0,1.0};
-    GLfloat light_position2[] = { m.minVertex->points[0]-1, m.minVertex->points[1], m.minVertex->points[2], 0.0 };
+    GLfloat light_position2[] = { m.minVertex->x-1, m.minVertex->y, m.minVertex->z, 0.0 };
 
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
@@ -49,8 +51,7 @@
     glColor3f (1.0, 1.0, 1.0);
     glLoadIdentity ();         /* clear the matrix */
     /* viewing transformation  */
-    gluLookAt (eye[0], eye[1], eye[2], 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-
+    camera->look();
     m.render(materials);
     glutSwapBuffers();
     glFlush();
@@ -60,23 +61,30 @@
     glViewport (0, 0, (GLsizei) w, (GLsizei) h);
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective (45.0, w/(double)h,.2, 1000);
+    camera->setWindowSize(w, h);
+    camera->look();
     glMatrixMode (GL_MODELVIEW);
   }
 
   void keyboard(unsigned char key, int x, int y) {
     switch (key) {
       case 'w':
-        eye[2] -= 1;
+        camera->move(Object::FRONT);
         break;
       case 's':
-        eye[2] += 1;
+        camera->move(Object::BACK);
         break;
       case 'a':
-        eye[0] += 1;
+        camera->rotate(-10);
         break;
       case 'd':
-        eye[0] -= 1;
+        camera->rotate(10);
+        break;
+      case 'z':
+        camera->getPosition()->y++;
+        break;
+      case 'x':
+        camera->getPosition()->y--;
         break;
       case 'u':
         glDisable(GL_LIGHTING);
@@ -99,13 +107,10 @@ void pick(int button, int state, int x, int y) {
   glLoadIdentity();
   gluPickMatrix ((GLdouble) x, (GLdouble) (viewport[3] - y),
                      .1, .1, viewport);
-  gluPerspective (45.0, glutGet(GLUT_WINDOW_WIDTH)/(double)glutGet(GLUT_WINDOW_HEIGHT),.2, 1000);
-  glMatrixMode(GL_MODELVIEW);
+  camera->look(false);
   m.render(materials,true);
-  glMatrixMode(GL_PROJECTION);
   glPopMatrix();
   glFlush();
-  glMatrixMode(GL_MODELVIEW);
 }
 
 
@@ -138,7 +143,9 @@ int main(int argc, char** argv) {
     }
     glutInit(&argc, argv);
     glutInitDisplayMode (GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize (500, 500);
+    int w = 500, h = 500;
+    camera = new Camera(w,h);
+    glutInitWindowSize (w, h);
     glutInitWindowPosition (100, 100);
     glutCreateWindow (argv[0]);
     init ();

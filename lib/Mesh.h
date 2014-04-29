@@ -3,7 +3,7 @@
 
   #include "includes.h"
   #include "Group.h"
-  #include "Vertex.h"
+  #include "Point.h"
   #include "Material.h"
 
   using namespace std;
@@ -14,14 +14,14 @@
       void render(vector<Material> materials);
       void render(vector<Material> materials, bool selection);
       vector<Group> groups;
-      vector<Vertex> allNormals;
-      vector<Vertex> allTextures;
-      void addVertex(Vertex v);
-      Vertex* minVertex;
-      Vertex* maxVertex;
+      vector<Point> allNormals;
+      vector<Point> allTextures;
+      void addVertex(Point v);
+      Point* minVertex;
+      Point* maxVertex;
 
     private:
-      vector<Vertex> allVertices;
+      vector<Point> allVertices;
       void proccessHits(GLint hits, GLuint buffer[]);
   };
 #endif
