@@ -19,6 +19,7 @@
       void addVertex(Point v);
       Point* minVertex;
       Point* maxVertex;
+      void selectGroup(int g);
 
     private:
       vector<Point> allVertices;

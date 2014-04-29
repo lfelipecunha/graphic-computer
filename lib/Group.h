@@ -14,8 +14,11 @@
       vector<Face> faces;
       vector<Material> materials;
       bool isActive();
+      bool isSelected();
+      void select();
+      void deselect();
       void toogle();
     private:
-      bool status;
+      bool status, selected;
   };
 #endif

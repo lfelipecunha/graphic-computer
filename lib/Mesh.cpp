@@ -17,6 +17,10 @@ void Mesh::render(vector<Material> materials, bool selection) {
     glPushMatrix();
     Group g = groups[i];
     if (!g.isActive()) {
+      continue;
+    }
+
+    if (g.isSelected()) {
       glColor3f(1,0,0);
     } else {
       glColor3f(1,1,1);
@@ -101,7 +105,24 @@ void Mesh::proccessHits(GLint hits, GLuint buffer[]) {
       ptr++;
     }
   }
-  groups[g].toogle();
+  if (hits > 0) {
+    Group* gr = &groups[g];
+    if (gr->isSelected()) {
+      gr->toogle();
+    } else {
+      selectGroup(g);
+    }
+  }
+}
+
+void Mesh::selectGroup(int g) {
+  for (int i=0; i < (long)groups.size(); i++) {
+    if (i == g) {
+      groups[g].select();
+    } else {
+      groups[i].deselect();
+    }
+  }
 }
 
 void Mesh::addVertex(Point v) {
