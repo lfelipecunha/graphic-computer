@@ -159,3 +159,27 @@ Mesh::Mesh() {
   minVertex = new Point(0,0,0);
   maxVertex = new Point(0,0,0);
 }
+
+void Mesh::toObj(const char* filePath) {
+  ofstream file (filePath);
+  for (int i=0; i< (long)allVertices.size(); i++) {
+    Point p = allVertices[i];
+    file << "v " << p.x << " " << p.y << " " << p.z << "\n";
+  }
+
+  for (int i=0; i < (long)groups.size(); i++) {
+    Group g = groups[i];
+    file << "g " << g.name << "\n";
+    for (int j=0; j < (long)g.faces.size(); j++) {
+      Face f = g.faces[j];
+      file << "f ";
+      for (int k=0; k < (long)f.vertices.size(); k++) {
+        file << f.vertices[k]+1 << "//";
+        if (k < (long)f.vertices.size()) {
+          file << " ";
+        }
+      }
+      file << "\n";
+    }
+  }
+}

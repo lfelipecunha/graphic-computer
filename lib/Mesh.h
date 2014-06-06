@@ -20,6 +20,7 @@
       Point* minVertex;
       Point* maxVertex;
       void selectGroup(int g);
+      void toObj(const char* filePath);
 
     private:
       vector<Point> allVertices;
