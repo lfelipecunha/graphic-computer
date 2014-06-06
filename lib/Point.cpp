@@ -20,3 +20,15 @@ Point* Point::operator+(const Point* p) const {
 
     return result;
 }
+
+Point* Point::operator*(float val) const {
+  Point self = *this;
+
+  Point* result = new Point(
+    self.x * val,
+    self.y * val,
+    self.z * val
+  );
+
+  return result;
+}
