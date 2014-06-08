@@ -21,9 +21,9 @@
       Point* maxVertex;
       void selectGroup(int g);
       void toObj(const char* filePath);
+      vector<Point> allVertices;
 
     private:
-      vector<Point> allVertices;
       void proccessHits(GLint hits, GLuint buffer[]);
   };
 #endif

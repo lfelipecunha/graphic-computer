@@ -1,5 +1,6 @@
 #include "Curve.h"
 
+
 Curve::Curve(vector<Point> p, bool base) {
   if (base) {
     basePoints = p;
@@ -9,21 +10,25 @@ Curve::Curve(vector<Point> p, bool base) {
   }
 }
 
-/*Curve::Curve(const char* filePath) {
+Curve::Curve(const char* filePath) {
   ifstream file (filePath);
   string buf;
   stringstream aux;
-  while(true) {
-    if (!file.good()) {
-      break;
-    }
-    getline(file, buf);
-
-    if (buf.empty()) {
-
+  getline(file, buf);
+  if (!buf.empty()) {
+    int lines = atoi(buf.c_str());
+    cout << buf << ", " << lines << endl;
+    for (int i=0; i<lines; i++) {
+      getline(file, buf);
+      float pts[3];
+      file >> pts[0];
+      file >> pts[1];
+      file >> pts[2];
+      basePoints.push_back(Point(pts[0], pts[1], pts[2]));
     }
   }
-}*/
+  generatePoints();
+}
 
 Curve* Curve::scale(float size, bool in) {
   vector<Point> p;
@@ -128,7 +133,20 @@ vector<Point> Curve::getPoints() {
 
 void Curve::save(const char* filePath) {
   ofstream f (filePath);
+  f << basePoints.size() << endl;
   for (int i=0; i < (long)basePoints.size(); i++) {
-    f << basePoints[i].x << " "<< basePoints[i].y << " "<< basePoints[i].z << "\n";
+    f << basePoints[i].x << " "<< basePoints[i].y << " "<< basePoints[i].z << endl;
   }
+}
+
+void Curve::rotate(float angle, int axis) {
+  ObjectTransform::rotate(&points, angle, axis);
+}
+
+void Curve::translate(Point p) {
+  ObjectTransform::translate(&points, p);
+}
+
+void Curve::scale(float scale) {
+  ObjectTransform::scale(&points, scale);
 }
