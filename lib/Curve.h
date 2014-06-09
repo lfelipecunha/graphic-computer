@@ -7,7 +7,7 @@
 
   using namespace std;
 
-  class Curve {
+  class Curve : public ObjectTransform {
     public:
       Curve(const char* filePath);
       Curve(vector<Point> p, bool base=true);
@@ -15,13 +15,11 @@
 
       void scale(float scale);
       void render();
-      vector<Point> getPoints();
       void translate(Point p);
       void save(const char* filePath);
       void rotate(float angle, int axis);
     private:
       vector<Point> basePoints;
-      vector<Point> points;
       void generatePoints();
   };
 #endif

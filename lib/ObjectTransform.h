@@ -7,8 +7,13 @@
   using namespace std;
   class ObjectTransform {
     public:
-      void static rotate(vector<Point>* points, float angle, int axis);
-      void static translate(vector<Point>* points, Point p);
-      void static scale(vector<Point>* points, float scale);
+      ObjectTransform();
+      void rotate(float angle, Point vector);
+      void translate(Point vector);
+      void scale(Point vector);
+      vector<Point> getPoints();
+    protected:
+      vector<Point> points;
+      Matrix *internal;
   };
 #endif

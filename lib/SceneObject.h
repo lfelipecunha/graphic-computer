@@ -15,6 +15,7 @@
     float getWidth();
     void setAngle(float angle, int axis);
     float normalizeAngle(float angle);
+    void setScale(float scale);
     protected:
     Mesh object;
     Point pos;

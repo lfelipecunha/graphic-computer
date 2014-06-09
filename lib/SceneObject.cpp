@@ -4,6 +4,7 @@ SceneObject::SceneObject(Mesh o, vector<Material>* m) {
   object = o;
   pos = Point(0,0,0);
   materials = m;
+  scale = 1;
 }
 
 void SceneObject::setPosition(Point p) {
@@ -17,6 +18,8 @@ void SceneObject::render() {
     glRotatef(angleY,0,1,0);
     glRotatef(angleZ,0,0,1);
     glTranslatef(pos.x, pos.y, pos.z);
+    glScalef(scale, scale, scale);
+
     object.render(*materials);
 
   glPopMatrix();
@@ -50,4 +53,8 @@ float SceneObject::normalizeAngle(float angle) {
     angle = 360 - angle;
   }
   return angle;
+}
+
+void SceneObject::setScale(float s) {
+  scale = s;
 }

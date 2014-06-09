@@ -127,26 +127,10 @@ void Curve::generatePoints() {
   }
 }
 
-vector<Point> Curve::getPoints() {
-  return points;
-}
-
 void Curve::save(const char* filePath) {
   ofstream f (filePath);
   f << basePoints.size() << endl;
   for (int i=0; i < (long)basePoints.size(); i++) {
     f << basePoints[i].x << " "<< basePoints[i].y << " "<< basePoints[i].z << endl;
   }
-}
-
-void Curve::rotate(float angle, int axis) {
-  ObjectTransform::rotate(&points, angle, axis);
-}
-
-void Curve::translate(Point p) {
-  ObjectTransform::translate(&points, p);
-}
-
-void Curve::scale(float scale) {
-  ObjectTransform::scale(&points, scale);
 }
