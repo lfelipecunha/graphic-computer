@@ -14,17 +14,7 @@ void Pista::scale(SceneObject *reference_object, float scale) {
   p2 = object.allVertices[f.vertices[2]];
   float dist = sqrt(pow(p1.x - p2.x,2) + pow(p1.y - p2.y,2) + pow(p1.z - p2.z,2));
   scale = width / dist * scale;
-
-  for (int i=0; i<(long)object.allVertices.size(); i++) {
-    object.allVertices[i].x *= scale;
-    object.allVertices[i].z *= scale;
-  }
-  vector<Point> p = curve->getPoints();
-  for (int i=0; i < (long) p.size(); i++) {
-    p[i].x *= scale;
-    p[i].y *= scale;
-  }
-  curve = new Curve(p, false);
+  setScale(scale);
 }
 
 Point Pista::getNextPoint(int from) {
