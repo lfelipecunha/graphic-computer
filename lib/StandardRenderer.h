@@ -1,15 +1,16 @@
-#ifndef __OpenGLRenderer
-  #define __OpenGLRenderer
+#ifndef __StandardRenderer
+  #define __StandardRenderer
 
   #include "includes.h"
   #include "RendererStrategy.h"
   #include "Point.h"
+  #include "Matrix.h"
 
   using namespace std;
 
-  class OpenGLRenderer : public RendererStrategy {
+  class StandardRenderer : public RendererStrategy {
     public:
-      OpenGLRenderer(GLenum mode);
+      StandardRenderer(GLenum mode);
       virtual void loadIdentity();
       virtual void pushMatrix();
       virtual void popMatrix();
@@ -17,5 +18,8 @@
       virtual void scale(float scale, Point *vector);
       virtual void translate(Point *position);
       virtual void renderPoints(vector<Point> points);
+    protected:
+        vector<Matrix> matrices;
   };
 #endif
+

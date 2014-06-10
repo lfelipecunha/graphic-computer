@@ -50,6 +50,7 @@ void Object::setPoints(vector<vector<Point> > pts) {
 
 void Object::render() {
   renderer->loadIdentity();
+  renderer->pushMatrix();
   renderer->rotate(angleX, new Point(1,0,0));
   renderer->rotate(angleY, new Point(0,1,0));
   renderer->rotate(angleZ, new Point(0,0,1));
@@ -58,4 +59,5 @@ void Object::render() {
   for (int i=0; i<(long)points.size(); i++) {
     renderer->renderPoints(points[i]);
   }
+  renderer->popMatrix();
 }

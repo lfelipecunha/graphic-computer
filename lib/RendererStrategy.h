@@ -8,6 +8,8 @@
   class RendererStrategy {
     public:
       virtual void loadIdentity() = 0;
+      virtual void pushMatrix() = 0;
+      virtual void popMatrix() = 0;
       virtual void rotate(float angle, Point *vector) = 0;
       virtual void scale(float scale, Point *vector) = 0;
       virtual void translate(Point *position) = 0;

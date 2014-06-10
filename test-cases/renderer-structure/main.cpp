@@ -1,5 +1,6 @@
 #include "../../lib/includes.h"
 #include "../../lib/OpenGLRenderer.h"
+#include "../../lib/StandardRenderer.h"
 #include "../../lib/Object.h"
 
 using namespace std;
@@ -87,24 +88,25 @@ void reshape (int x, int y) {
 }
 
 int main(int argc, char** argv) {
-    o = new Object(new OpenGLRenderer(GL_POLYGON));
-    vector<vector<Point> > pts1;
-    vector<Point> pts;
-    pts.push_back(Point(0,0,0));
-    pts.push_back(Point(1,0,0));
-    pts.push_back(Point(1,1,0));
-    pts.push_back(Point(0,1,0));
-    pts1.push_back(pts);
-    o->setPoints(pts1);
-    o->setAngle(45,Object::ANGLE_Y);
+  o = new Object(new StandardRenderer(GL_POLYGON));
+  vector<vector<Point> > pts1;
+  vector<Point> pts;
+  pts.push_back(Point(0,0,0));
+  pts.push_back(Point(1,0,0));
+  pts.push_back(Point(1,1,0));
+  pts.push_back(Point(0,1,0));
+  pts1.push_back(pts);
+  o->setPoints(pts1);
+  o->setPosition(Point(0,0,2));
+  o->setAngle(45,Object::ANGLE_X);
 
-    glutInit(&argc, argv);
-    glutInitDisplayMode (GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize (w, h);
-    glutInitWindowPosition (100, 100);
-    glutCreateWindow (argv[0]);
-    init();
-    glutIdleFunc(display);
-    glutReshapeFunc(reshape);
-    glutMainLoop();
+  glutInit(&argc, argv);
+  glutInitDisplayMode (GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
+  glutInitWindowSize (w, h);
+  glutInitWindowPosition (100, 100);
+  glutCreateWindow (argv[0]);
+  init();
+  glutDisplayFunc(display);
+  glutReshapeFunc(reshape);
+  glutMainLoop();
 }
