@@ -14,7 +14,6 @@ void Camera::look(bool aux) {
     float eyeZ = p->z - sin(radAngle) * 3;
 
     float directionX = p->x;
-    float directionY = 0;
     float directionZ = p->z;
     if (aux) {
       glMatrixMode(GL_PROJECTION);

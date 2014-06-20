@@ -6,7 +6,7 @@ ImageHandler::ImageHandler(const char *filePath) {
     char aux, type;
 
     std::ifstream is(filePath);
-
+    std::cout << filePath << std::endl;
     aux = is.get();
     if (aux != 'P') {
         // enviar erro

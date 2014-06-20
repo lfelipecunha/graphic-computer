@@ -30,8 +30,9 @@ public:
   float getRadius();
 
   bool collidingWith(Object * o);
-protected:
+  void setPosition(Point *p);
   void setDirectionAngle(float angle);
+protected:
 
   Point * position;
 

@@ -13,8 +13,33 @@ Mesh m = Mesh();
 
 bool editing = true;
 
+Point deslocamento() {
+  vector<Point> p1;
+  p1 = c3->getPoints();
+  int size = p1.size();
+  Point pMax, pMin;
+  pMin.x = X;
+  pMin.y = Y;
+  for (int i=0; i< size; i++) {
+    if (p1[i].x > pMax.x) {
+      pMax.x = p1[i].x;
+    }
+    if (p1[i].y > pMax.y) {
+      pMax.y = p1[i].y;
+    }
 
-void createMesh() {
+    if (p1[i].x < pMin.x) {
+      pMin.x = p1[i].x;
+    }
+    if (p1[i].y < pMin.y) {
+      pMin.y = p1[i].y;
+    }
+  }
+  cout << (pMax.x - pMin.x)/2 << endl;
+  return Point(0-(pMin.x+(pMax.x - pMin.x)/2),0-(pMin.y + (pMax.y - pMin.y)/2),0);
+}
+
+void createMesh(Point desloc) {
   string name = "default";
   Group g = Group(name);
   vector<Point> p1, p2;
@@ -23,8 +48,17 @@ void createMesh() {
   int size = p1.size();
   int total = size * 2;
   for (int i=0; i< size; i++) {
+    p1[i].x += desloc.x;
+    p1[i].z = p1[i].y + desloc.y;
+    p1[i].y = 0;
+
+    p2[i].x += desloc.x;
+    p2[i].z = p2[i].y + desloc.y;
+    p2[i].y = 0;
     m.addVertex(p1[i]);
+    m.allNormals.push_back(Point(p1[i].x, 1, p1[i].z));
     m.addVertex(p2[i]);
+    m.allNormals.push_back(Point(p2[i].x, 1, p2[i].z));
   }
 
   for (int i=0; i<size; i++) {
@@ -35,29 +69,29 @@ void createMesh() {
 
     Face f1 = Face();
     f1.vertices.push_back(pt0);
-    f1.normals.push_back(-1);
+    f1.normals.push_back(pt0);
     f1.textures.push_back(-1);
 
     f1.vertices.push_back(pt2);
-    f1.normals.push_back(-1);
+    f1.normals.push_back(pt2);
     f1.textures.push_back(-1);
 
     f1.vertices.push_back(pt1);
-    f1.normals.push_back(-1);
+    f1.normals.push_back(pt1);
     f1.textures.push_back(-1);
     g.faces.push_back(f1);
 
     Face f2 = Face();
     f2.vertices.push_back(pt1);
-    f2.normals.push_back(-1);
+    f2.normals.push_back(pt1);
     f2.textures.push_back(-1);
 
     f2.vertices.push_back(pt2);
-    f2.normals.push_back(-1);
+    f2.normals.push_back(pt2);
     f2.textures.push_back(-1);
 
     f2.vertices.push_back(pt3);
-    f2.normals.push_back(-1);
+    f2.normals.push_back(pt3);
     f2.textures.push_back(-1);
     g.faces.push_back(f2);
   }
@@ -87,8 +121,9 @@ void mouse(int button, int state, int x, int y) {
     c = new Curve(points);
     c2 = c->scale(0.8,true);
     c3 = c->scale(0.8, false);
-    createMesh();
-    c->save("files/pista.curve");
+    Point d = deslocamento();
+    createMesh(d);
+    c->save("files/pista.curve",d);
   }
   glutPostRedisplay();
 }

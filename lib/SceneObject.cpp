@@ -5,6 +5,7 @@ SceneObject::SceneObject(Mesh o, vector<Material>* m) {
   pos = Point(0,0,0);
   materials = m;
   scale = 1;
+  angleX = angleY = angleZ = 0;
 }
 
 void SceneObject::setPosition(Point p) {
@@ -14,10 +15,10 @@ void SceneObject::setPosition(Point p) {
 void SceneObject::render() {
   glPushMatrix();
 
+    glTranslatef(pos.x, pos.y, pos.z);
     glRotatef(angleX,1,0,0);
     glRotatef(angleY,0,1,0);
     glRotatef(angleZ,0,0,1);
-    glTranslatef(pos.x, pos.y, pos.z);
     glScalef(scale, scale, scale);
 
     object.render(*materials);
@@ -29,6 +30,12 @@ float SceneObject::getWidth() {
   Point* min = object.minVertex;
   Point* max = object.maxVertex;
   return abs(max->x - min->x);
+}
+
+float SceneObject::getHeight() {
+  Point* min = object.minVertex;
+  Point* max = object.maxVertex;
+  return abs(max->y - min->y);
 }
 
 void SceneObject::setAngle(float angle, int axis) {
@@ -57,4 +64,8 @@ float SceneObject::normalizeAngle(float angle) {
 
 void SceneObject::setScale(float s) {
   scale = s;
+}
+
+float SceneObject::getScale() {
+  return scale;
 }

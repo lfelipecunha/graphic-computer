@@ -1,8 +1,6 @@
 #include "Pista.h"
 
 Pista::Pista(Mesh m, const char* curve_path, vector<Material>* materials) : SceneObject(m, materials) {
-  //TODO centralizar a pista
-  setAngle(90,0);
   curve = new Curve(curve_path);
 }
 
@@ -15,6 +13,7 @@ void Pista::scale(SceneObject *reference_object, float scale) {
   float dist = sqrt(pow(p1.x - p2.x,2) + pow(p1.y - p2.y,2) + pow(p1.z - p2.z,2));
   scale = width / dist * scale;
   setScale(scale);
+  curve->setScale(scale);
 }
 
 Point Pista::getNextPoint(int from) {
@@ -29,5 +28,5 @@ Point Pista::getNextPoint(int from) {
 }
 
 bool Pista::hasNextPoint(int from) {
-  return from < (long)curve->getPoints().size()-1;
+  return from < ((long)curve->getPoints().size()-1);
 }

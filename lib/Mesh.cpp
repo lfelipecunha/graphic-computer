@@ -12,6 +12,7 @@ void Mesh::render(vector<Material> materials, bool selection) {
     glInitNames();
     glPushName(0);
   }
+  float blank[] = {1,1,1};
 
   for (int i=0; i< (long)groups.size(); i++) {
     glPushMatrix();
@@ -28,23 +29,32 @@ void Mesh::render(vector<Material> materials, bool selection) {
     if (selection) {
       glLoadName(i);
     }
+    bool founded = false;
     for (int h=0; h < (long)materials.size(); h++) {
       Material m = materials[h];
-      if (g.material.compare(0,g.material.length(), m.name)) {
+      if (g.material.size() > 0 && g.material.compare(0,g.material.length(), m.name) == 0) {
         if (m.ka != NULL) {
           float aux[] = { m.ka->x, m.ka->y, m.ka->z };
           glMaterialfv(GL_FRONT, GL_AMBIENT, aux);
+        } else {
+          glMaterialfv(GL_FRONT, GL_AMBIENT, blank);
         }
         if (m.kd != NULL) {
           float aux[] = { m.kd->x, m.kd->y, m.kd->z };
           glMaterialfv(GL_FRONT, GL_DIFFUSE, aux);
+        } else {
+          glMaterialfv(GL_FRONT, GL_DIFFUSE, blank);
         }
         if (m.ks != NULL) {
           float aux[] = { m.ks->x, m.ks->y, m.ks->z };
           glMaterialfv(GL_FRONT, GL_SPECULAR, aux);
+        } else {
+          glMaterialfv(GL_FRONT, GL_SPECULAR, blank);
         }
         if (m.ns != NULL) {
           glMaterialfv(GL_FRONT, GL_SHININESS, m.ns);
+        } else {
+          glMaterialfv(GL_FRONT, GL_SHININESS, blank);
         }
         if (m.texture != NULL) {
           glTexImage2D(
@@ -59,8 +69,15 @@ void Mesh::render(vector<Material> materials, bool selection) {
             m.texture->getPixels()
           );
         }
+        founded = true;
         break;
       }
+    }
+    if (!founded) {
+      glMaterialfv(GL_FRONT, GL_AMBIENT, blank);
+      glMaterialfv(GL_FRONT, GL_DIFFUSE, blank);
+      glMaterialfv(GL_FRONT, GL_SPECULAR, blank);
+      glMaterialfv(GL_FRONT, GL_SHININESS, blank);
     }
     for (int j=0; j < (long)g.faces.size(); j++) {
       Face face = g.faces[j];
@@ -139,8 +156,8 @@ void Mesh::addVertex(Point v) {
   if (minVertex->y > y) {
     minVertex->y = y;
   }
-  if (minVertex->y > z) {
-    minVertex->y = z;
+  if (minVertex->z > z) {
+    minVertex->z = z;
   }
 
   if (maxVertex->x < x) {

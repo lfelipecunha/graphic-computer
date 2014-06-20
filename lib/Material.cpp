@@ -7,7 +7,10 @@ Material::Material(string n) {
   texture = NULL;
 }
 
-vector<Material> Material::getMaterials(ifstream &file) {
+vector<Material> Material::getMaterials(string filePath) {
+  ifstream file(filePath.c_str());
+  unsigned found = filePath.find_last_of("/\\");
+  string base =  filePath.substr(0,found) + "/";
   string lineBuffer;
   int current = -1;
   vector<Material> materials;
@@ -36,7 +39,7 @@ vector<Material> Material::getMaterials(ifstream &file) {
       } else if (lineBuffer.compare(0,2, "Ns") == 0) {
         materials[current].ns = new float(atof(lineBuffer.substr(3).c_str()));
       } else if (lineBuffer.compare(0,6, "map_Kd") == 0) {
-        materials[current].texture = new ImageHandler(lineBuffer.substr(7).c_str());
+        materials[current].texture = new ImageHandler((base + lineBuffer.substr(7)).c_str());
       }
     }
   }

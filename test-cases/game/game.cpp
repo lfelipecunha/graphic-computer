@@ -1,18 +1,18 @@
 
   #include "../../lib/ObjReader.h"
-  #include "../../lib/SceneObject.h"
   #include "../../lib/Camera.h"
   #include "../../lib/Curve.h"
   #include "Pista.h"
+  #include "Car.h"
 
-  SceneObject* car;
+  bool car_view = false;
+
+  Car* car;
   vector<Material> materials;
 
   Pista* pista;
 
   Camera* camera;
-
-  int car_position = 0;
 
   void init(void) {
     glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -89,25 +89,28 @@
     glMatrixMode (GL_MODELVIEW);
   }
 
+void set_top_view() {
+  float w = pista->getWidth();
+  float h = pista->getHeight();
+  float cateto;
+  if (w > h) {
+    cateto = w;
+  } else {
+    cateto = h;
+  }
+  camera->setDirectionAngle(0.0);
+  camera->setPosition(new Point(0,pista->getScale() * cateto / 0.55785173935,0));
+  camera->directionY = 0;
+}
+
   void keyboard(unsigned char key, int x, int y) {
     switch (key) {
-      case 'w':
-        camera->move(Object::FRONT);
-        break;
       case 's':
-        camera->move(Object::BACK);
+        car_view = false;
+        set_top_view();
         break;
-      case 'a':
-        camera->rotate(-10);
-        break;
-      case 'd':
-        camera->rotate(10);
-        break;
-      case 'z':
-        camera->getPosition()->y++;
-        break;
-      case 'x':
-        camera->getPosition()->y--;
+      case 'c':
+        car_view = true;
         break;
       case 'u':
         glDisable(GL_LIGHTING);
@@ -121,12 +124,13 @@
   }
 
 void background(int interval) {
-    if (!pista->hasNextPoint(car_position)) {
-      car_position = 0;
-    }
-    car->setPosition(pista->getNextPoint(car_position++));
-
-    glutTimerFunc(interval, background, interval);
+  car->move();
+  if (car_view) {
+    camera->setPosition(new Point(0,car->pos.y,0));
+    camera->directionY = car->pos.y;
+    camera->lookAt(&car->pos);
+  }
+  glutTimerFunc(interval, background, interval);
 }
 
 int main(int argc, char** argv) {
@@ -142,23 +146,23 @@ int main(int argc, char** argv) {
   pista = new Pista(ObjReader::getMesh(pista_file), "files/pista.curve", &materials);
 
   if (file) {
-    car = new SceneObject(ObjReader::getMesh(file), &materials);
-    pista->scale(car, 3);
+    car = new Car(ObjReader::getMesh(file), &materials, pista);
+    pista->scale(car, 5);
     string material_file = filePath.substr(0, filePath.length()-3) + "mtl";
     ifstream m_file;
-    m_file.open(material_file.c_str());
     if (m_file) {
-      materials = Material::getMaterials(m_file);
+      materials = Material::getMaterials(material_file);
     }
     glutInit(&argc, argv);
     glutInitDisplayMode (GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
     int w = 500, h = 500;
     camera = new Camera(w,h);
+    set_top_view();
     glutInitWindowSize (w, h);
     glutInitWindowPosition (100, 100);
     glutCreateWindow (argv[0]);
     init ();
-    background(500);
+    background(10);
     glutIdleFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);

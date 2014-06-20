@@ -13,12 +13,14 @@
     void render();
     void setPosition(Point p);
     float getWidth();
+    float getHeight();
     void setAngle(float angle, int axis);
     float normalizeAngle(float angle);
     void setScale(float scale);
+    float getScale();
+    Point pos;
     protected:
     Mesh object;
-    Point pos;
     vector<Material>* materials;
     float angleX, angleY, angleZ;
     float scale;

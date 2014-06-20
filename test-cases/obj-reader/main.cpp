@@ -136,11 +136,7 @@ int main(int argc, char** argv) {
   if (filePath != "exit") {
     m = ObjReader::getMesh(file);
     string material_file = filePath.substr(0, filePath.length()-3) + "mtl";
-    ifstream m_file;
-    m_file.open(material_file.c_str());
-    if (m_file) {
-      materials = Material::getMaterials(m_file);
-    }
+    materials = Material::getMaterials(material_file);
     glutInit(&argc, argv);
     glutInitDisplayMode (GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
     int w = 500, h = 500;

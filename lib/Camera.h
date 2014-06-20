@@ -8,6 +8,7 @@ class Camera : public Object {
     Camera(int w, int h);
     void look(bool aux = true);
     void setWindowSize(int x, int y);
+    float directionY;
   protected:
     int windowX, windowY;
 };

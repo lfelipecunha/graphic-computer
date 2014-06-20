@@ -110,3 +110,7 @@ bool Object::collidingWith(Object * other) {
 float Object::getRadius() {
     return radius;
 }
+
+void Object::setPosition(Point *p) {
+  position = p;
+}

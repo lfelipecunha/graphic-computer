@@ -8,6 +8,7 @@ Curve::Curve(vector<Point> p, bool base) {
   } else {
     points = p;
   }
+  curve_scale = 1;
 }
 
 Curve::Curve(const char* filePath) {
@@ -17,17 +18,16 @@ Curve::Curve(const char* filePath) {
   getline(file, buf);
   if (!buf.empty()) {
     int lines = atoi(buf.c_str());
-    cout << buf << ", " << lines << endl;
     for (int i=0; i<lines; i++) {
       getline(file, buf);
       float pts[3];
       file >> pts[0];
       file >> pts[1];
       file >> pts[2];
-      basePoints.push_back(Point(pts[0], pts[1], pts[2]));
+      points.push_back(Point(pts[0], pts[1], pts[2]));
     }
   }
-  generatePoints();
+  curve_scale = 1;
 }
 
 Curve* Curve::scale(float size, bool in) {
@@ -75,14 +75,15 @@ Curve* Curve::scale(float size, bool in) {
 }
 
 void Curve::render() {
-  if (points.size() > 0) {
+  vector<Point> aux = getPoints();
+  if (aux.size() > 0) {
     glColor3f(1,0,0);
     glBegin(GL_LINE_STRIP);
-    for (int i=0; i<(long)points.size(); i++) {
-      Point p = points[i];
+    for (int i=0; i<(long)aux.size(); i++) {
+      Point p = aux[i];
       glVertex3f(p.x, p.y, p.z);
     }
-    glVertex3f(points[0].x, points[0].y, points[0].z);
+    glVertex3f(aux[0].x, aux[0].y, aux[0].z);
     glEnd();
   }
 
@@ -127,10 +128,37 @@ void Curve::generatePoints() {
   }
 }
 
-void Curve::save(const char* filePath) {
+void Curve::save(const char* filePath, Point desloc) {
   ofstream f (filePath);
-  f << basePoints.size() << endl;
-  for (int i=0; i < (long)basePoints.size(); i++) {
-    f << basePoints[i].x << " "<< basePoints[i].y << " "<< basePoints[i].z << endl;
+  int pts = 5;
+  vector<Point> p = getPoints();
+  int size = (long)p.size();
+  f << size+pts-2 << endl;
+  for (int i=0; i < size-1; i++) {
+    f << p[i].x+desloc.x << " "<< p[i].y+desloc.y << " "<< p[i].z+desloc.z << endl;
   }
+  Point end = p.at(0);
+  Point start = p.at(size-2);
+  float amountX = (end.x - start.x) / pts;
+  float amountY = (end.y - start.y) / pts;
+  float amountZ = (end.z - start.z) / pts;
+  for (int i=0; i<pts-1; i++) {
+    start.x += amountX;
+    start.y += amountY;
+    start.z += amountZ;
+    f << start.x+desloc.x << " " << start.y+desloc.y << " " << start.z+desloc.z << endl;
+  }
+
+}
+
+void Curve::setScale(float s) {
+  curve_scale = s;
+}
+
+vector<Point> Curve::getPoints() {
+  vector<Point> result;
+  for (int i=0; i<(long)points.size(); i++) {
+    result.push_back(Point(points[i].x*curve_scale, points[i].y*curve_scale,points[i].z*curve_scale));
+  }
+  return result;
 }

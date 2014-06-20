@@ -10,7 +10,7 @@
   class Material {
     public:
       Material(string n);
-      vector<Material> static getMaterials(ifstream &file);
+      vector<Material> static getMaterials(string filePath);
       Point *ka, *kd, *ks;
       float *ns;
       string name;
